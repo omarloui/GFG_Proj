@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spec-Driven Development Workspace</title>
+    <meta name="description" content="Your spec-driven workspace. Edit specification.md to get started.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <div class="logo" id="logo">DevWorkspace</div>
+            <button class="btn btn-secondary" id="theme-toggle">Toggle Theme</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card" style="max-width: 800px; margin: 3rem auto; text-align: center; display: flex; flex-direction: column; gap: 1.5rem;">
+            <h1 style="background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem;">Ready to Build</h1>
+            <p>Welcome to your spec-driven development workspace. We are set up and ready to create your application!</p>
+            
+            <div style="background: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); text-align: left; font-family: monospace; font-size: 0.95rem; margin: 1rem 0;">
+                <span style="color: var(--accent); font-weight: bold;">Step 1:</span> Open and edit the <a href="specification.md" style="color: var(--primary); text-decoration: none; border-bottom: 1px dashed var(--primary);">specification.md</a> file.<br>
+                <span style="color: var(--accent); font-weight: bold;">Step 2:</span> Outline your app's goals, features, and UI style.<br>
+                <span style="color: var(--accent); font-weight: bold;">Step 3:</span> Save the spec and tell me, and we'll implement it!
+            </div>
+
+            <div>
+                <button class="btn btn-primary" id="open-spec-btn">Let's Get Started</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Spec-Driven Development Workspace. Crafted with Antigravity.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -507,6 +507,23 @@ a:hover {
   color: var(--accent);
 }
 
+.chart-preview {
+  width: 100%;
+  min-height: 360px;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-base);
+}
+
+.chart-preview iframe {
+  width: 100%;
+  height: 360px;
+  border: 0;
+  display: block;
+}
+
 .message.model .message-body h1,
 .message.model .message-body h2,
 .message.model .message-body h3 {

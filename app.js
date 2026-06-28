@@ -395,6 +395,7 @@ async function parseAndCreateFiles(responseText) {
   const filePattern =
     /<create_file\s+filename="([^"]+)"\s+type="([^"]+)">\s*([\s\S]*?)\s*<\/create_file>/g;
   let match;
+  const createdFiles = [];
 
   while ((match = filePattern.exec(responseText)) !== null) {
     const filename = match[1];
@@ -407,16 +408,20 @@ async function parseAndCreateFiles(responseText) {
         const htmlContent = wrapGraphHtml(content, filename);
         const blob = new Blob([htmlContent], { type: "text/html" });
         await saveFileToOpfs(filename, blob);
+        createdFiles.push(filename);
         console.log(`Created file: ${filename}`);
       } else if (type === "json" || filename.endsWith(".json")) {
         const blob = new Blob([content], { type: "application/json" });
         await saveFileToOpfs(filename, blob);
+        createdFiles.push(filename);
         console.log(`Created JSON file: ${filename}`);
       }
     } catch (err) {
       console.error(`Error creating file ${filename}:`, err);
     }
   }
+
+  return createdFiles;
 }
 
 function wrapGraphHtml(content, filename) {
@@ -668,12 +673,20 @@ ${state.documentsSummary}`,
       "No response generated.";
 
     // Check for file creation requests in the response
-    await parseAndCreateFiles(replyText);
+    const createdFiles = await parseAndCreateFiles(replyText);
+    let previewUrl = null;
+    const createdHtml = createdFiles.find((name) =>
+      name.toLowerCase().endsWith(".html"),
+    );
+    if (createdHtml) {
+      previewUrl = await buildHtmlPreviewUrl(createdHtml);
+    }
 
     state.chatHistory.push({
       role: "model",
       text: replyText,
       html: marked.parse(replyText),
+      previewUrl,
     });
   } catch (err) {
     let errorDetails = err.message;
@@ -796,6 +809,11 @@ async function openHtmlFile(name) {
   if (!newWindow) {
     alert("Please allow pop-ups to view the graph file");
   }
+}
+
+async function buildHtmlPreviewUrl(filename) {
+  const file = await getFileBlob(filename);
+  return URL.createObjectURL(file);
 }
 
 async function downloadFile(name) {
@@ -1139,6 +1157,15 @@ const ChatPanel = () => html`
               >
             </div>
             <div class="message-body">
+              ${msg.previewUrl
+                ? html`<div class="chart-preview">
+                    <iframe
+                      src="${msg.previewUrl}"
+                      title="Graph preview"
+                      loading="lazy"
+                    ></iframe>
+                  </div>`
+                : ""}
               ${msg.role === "user" ? msg.text : renderHtml(msg.html)}
             </div>
           </div>
